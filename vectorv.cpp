@@ -89,11 +89,47 @@ class Vector{ //Base vector class represents a vector
 
         }
 
+        Vector operator*(int c){
+
+            //Initializes info for constructor of new vector
+            int new_vector_dims = v_dim;
+            std::vector<double> new_vector_components;
+            
+            //Multiples each component in current vector by c
+            for (double component : components){
+                new_vector_components.push_back(component * c);
+            }
+
+            Vector new_vector(new_vector_dims, new_vector_components);
+
+            if (position.size() == v_dim){ //Sets same position as current vector if the position is set
+                new_vector.setPosition(position);
+            }
+
+            return new_vector;
+        }
+
+        int operator*(Vector& v){ //Handles dot product multiplication
+
+            //Exception handling for vectors in different r
+            if (v_dim != v.v_dim){
+                std::cerr << "Cannot multiply two vectors of different dimensions.";
+            }
+
+            int sum = 0;
+            
+            for (int i = 0; i < v_dim; i++){
+                sum += (components[i] * v.components[i]);
+            }
+
+            return sum;
+        }
+
 
         void setPosition(std::vector<double> position){ //Sets the vector position on the plane
 
             if (position.size() != v_dim){
-                std::cerr << "Position vector must have length equal to vector dimension";
+                std::cerr << "Position vector must have length equal to vector dimension.";
                 return;
             }
 
@@ -106,11 +142,14 @@ class Vector{ //Base vector class represents a vector
 int main(){
 
     //Test stuff
-    std::vector<double> vector_comps = {1, 2, 17, 3, 5};
-    Vector* v = new Vector(5, vector_comps);
-    v->setPosition(vector_comps);
-    *v *= 5;
-    std::cout << v->vector_string;
+    std::vector<double> vector_comps = {1, 2};
+    Vector* v = new Vector(2, vector_comps);
+    Vector* u = new Vector(2, vector_comps);
+    std::cout << *u * *v << '\n';
+
+
+    delete v;
+    delete u;
 
     return 0;
 }
