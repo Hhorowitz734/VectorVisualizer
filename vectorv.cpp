@@ -9,15 +9,15 @@ class Vector{ //Base vector class represents a vector
 
     private:
 
-        std::string generateVectorString(std::vector<double> comps){ //Takes in components and generates a vector string
+        std::string generateVectorString(){ //Takes in components and generates a vector string
 
             vector_string = "Vector: <";
 
-            for (int i = 0; i < comps.size(); i++){ // Loops over and adds each component to the string
+            for (int i = 0; i < components.size(); i++){ // Loops over and adds each component to the string
 
-                vector_string += std::to_string(comps[i]).substr(0, 5);
+                vector_string += std::to_string(components[i]).substr(0, 5);
 
-                if (i < comps.size() - 1){
+                if (i < components.size() - 1){
                     vector_string += ", ";
                 }
 
@@ -26,6 +26,19 @@ class Vector{ //Base vector class represents a vector
             vector_string += ">\n";
 
             return vector_string;
+        }
+
+        double computeMagnitude(){ //Computes the magnitude of the vector
+
+            double sum_roots = 0;
+
+            for (double component : components) {
+                sum_roots += pow(component, 2);
+            }
+
+            magnitude = sqrt(sum_roots);
+
+            return magnitude;
         }
 
     public:
@@ -59,20 +72,10 @@ class Vector{ //Base vector class represents a vector
             //Sets the components of the vector
             this->components = comps;
 
-            //Calculates the magnitude of the vector and displays it
-            double sum_roots;
-            for (int i = 0; i < components.size(); i++){
+            //Calculates the magnitude and generates the vector string
+            this->magnitude = computeMagnitude();
+            this->vector_string = generateVectorString();
 
-                sum_roots += pow(components[i], 2); //Adds square of term for magnitude calculation
-
-                //Handles stuff for the vector string
-                vector_string += std::to_string(components[i]).substr(0, 5);
-                if (i < components.size() - 1){
-                    vector_string += ", ";
-                }
-            }
-            magnitude = sqrt(sum_roots);
-            vector_string += ">\n";
             std::cout << vector_string;
         }
 
@@ -82,8 +85,10 @@ class Vector{ //Base vector class represents a vector
             for (double& component : components){
                 component *= c;
             }
-
-            this->vector_string = generateVectorString(components);
+            
+            //Recomputes magnitude and generates new vector string
+            this->vector_string = generateVectorString();
+            this->magnitude = computeMagnitude();
 
             return *this;
 
@@ -111,6 +116,9 @@ class Vector{ //Base vector class represents a vector
 
         int operator*(Vector& v){ //Handles dot product multiplication
 
+            //PLEASE NOTE -> THIS FUNCTION PERFORMS DOT PRODUCT MULTIPLICATION ONLY
+            //FOR CROSS PRODUCT MULTIPLICATION, SEE [ CHANGE THIS WHEN I MAKE THAT FUNCTION ]
+
             //Exception handling for vectors in different r
             if (v_dim != v.v_dim){
                 std::cerr << "Cannot multiply two vectors of different dimensions.";
@@ -118,12 +126,15 @@ class Vector{ //Base vector class represents a vector
 
             int sum = 0;
             
+            //Multiplies values of components and adds them to sum (to compute dot product)
             for (int i = 0; i < v_dim; i++){
                 sum += (components[i] * v.components[i]);
             }
 
             return sum;
         }
+
+        //ADD ADDITION AND SUBTRACTION HERE
 
 
         void setPosition(std::vector<double> position){ //Sets the vector position on the plane
@@ -145,7 +156,8 @@ int main(){
     std::vector<double> vector_comps = {1, 2};
     Vector* v = new Vector(2, vector_comps);
     Vector* u = new Vector(2, vector_comps);
-    std::cout << *u * *v << '\n';
+    *u *= 3;
+    std::cout << u->vector_string;
 
 
     delete v;
