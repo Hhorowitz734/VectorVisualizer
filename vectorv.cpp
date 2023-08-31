@@ -188,7 +188,6 @@ class Vector{ //Base vector class represents a vector
 
         Vector getUnitVector(){ //Returns the unit vector of the vector
 
-
             //Sets up the new vector
             int new_vector_dims = v_dim;
             std::vector<double> new_vector_components;
@@ -209,6 +208,22 @@ class Vector{ //Base vector class represents a vector
 
         }
 
+        double getAngleBetweenVectors(Vector v){ //Returns the angle between two angles
+
+            if (v_dim != v.v_dim){
+                std::cerr << "Cannot get angle between two vectors of different dimensions.\n";
+            }
+
+            int dot_product = *this * v;
+
+            //Uses formula for angle between vectors and returns result
+            double angle = acos(dot_product / (magnitude * v.magnitude));
+            angle *= (180 / M_PI); //Converts radians to degrees
+
+            return angle;
+
+        }
+
 };
 
 
@@ -217,7 +232,9 @@ int main(){
     //Test stuff
     std::vector<double> vector_comps = {6, 2, 3};
     Vector* v = new Vector(3, vector_comps);
-    Vector w = v->getUnitVector();
+    std::vector<double> vector2_comps = {6, 2, 4};
+    Vector* w = new Vector(3, vector2_comps);
+    std::cout << v->getAngleBetweenVectors(*w);
 
 
     delete v;
