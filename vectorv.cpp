@@ -176,7 +176,6 @@ class Vector{ //Base vector class represents a vector
 
         }
 
-
         void setPosition(std::vector<double> position){ //Sets the vector position on the plane
 
             if (position.size() != v_dim){
@@ -187,22 +186,41 @@ class Vector{ //Base vector class represents a vector
             this->position = position;
         }
 
+        Vector getUnitVector(){ //Returns the unit vector of the vector
+
+
+            //Sets up the new vector
+            int new_vector_dims = v_dim;
+            std::vector<double> new_vector_components;
+            
+            //Creates a new vector where the components are divided by the magnitude
+            for (double component : components){
+                new_vector_components.push_back(component / magnitude);
+            }
+
+            Vector new_vector(new_vector_dims, new_vector_components);
+
+            //Sets position to same as curent vetor
+            if (position.size() == v_dim){
+                new_vector.setPosition(position);
+            }
+
+            return new_vector;
+
+        }
+
 };
 
 
 int main(){
 
     //Test stuff
-    std::vector<double> vector_comps = {1, 2};
-    Vector* v = new Vector(2, vector_comps);
-    Vector* u = new Vector(2, vector_comps);
-    *v *= 3;
-    std::cout << u->vector_string;
-    Vector p = *u - *v;
+    std::vector<double> vector_comps = {6, 2, 3};
+    Vector* v = new Vector(3, vector_comps);
+    Vector w = v->getUnitVector();
 
 
     delete v;
-    delete u;
 
     return 0;
 }
