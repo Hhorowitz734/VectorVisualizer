@@ -134,7 +134,47 @@ class Vector{ //Base vector class represents a vector
             return sum;
         }
 
-        //ADD ADDITION AND SUBTRACTION HERE
+        Vector operator+(Vector& v){
+
+            if (v_dim != v.v_dim){
+                std::cerr << "Cannot add two vectors of different dimensions.";
+            }
+
+            //Sets up the new vector
+            int new_vector_dims = v_dim;
+            std::vector<double> new_vector_components;
+
+            //Adds the components of the two vector
+            for (int i = 0; i < v_dim; i++){
+                new_vector_components.push_back(components[i] + v.components[i]);
+            }
+
+            Vector new_vector(new_vector_dims, new_vector_components);
+
+            return new_vector;
+
+        }
+
+        Vector operator-(Vector& v){
+            
+            if (v_dim != v.v_dim){
+                std::cerr << "Cannot subtract two vectors of different dimensions.";
+            }
+
+            //Sets up the new vector
+            int new_vector_dims = v_dim;
+            std::vector<double> new_vector_components;
+
+            //Adds the components of the two vector
+            for (int i = 0; i < v_dim; i++){
+                new_vector_components.push_back(components[i] - v.components[i]);
+            }
+
+            Vector new_vector(new_vector_dims, new_vector_components);
+
+            return new_vector;
+
+        }
 
 
         void setPosition(std::vector<double> position){ //Sets the vector position on the plane
@@ -156,8 +196,9 @@ int main(){
     std::vector<double> vector_comps = {1, 2};
     Vector* v = new Vector(2, vector_comps);
     Vector* u = new Vector(2, vector_comps);
-    *u *= 3;
+    *v *= 3;
     std::cout << u->vector_string;
+    Vector p = *u - *v;
 
 
     delete v;
