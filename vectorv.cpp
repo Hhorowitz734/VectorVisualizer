@@ -224,7 +224,7 @@ class Vector{ //Base vector class represents a vector
 
         }
 
-        Vector getProjection(Vector b){ //Gets the vector projection of another vector b onto this vector
+        Vector getVectorProjection(Vector b){ //Returns the vector projection of another vector b onto this vector
 
             //NOTE -> THIS REPRESENTS THE EQUATION Proj(_a)b = ((a * b) / |a|^2) * a
             //And the vector which this function is called on is a
@@ -239,17 +239,68 @@ class Vector{ //Base vector class represents a vector
 
         }
 
+        double getScalarProjection(Vector b){ //Returns the scalar projection of another vector b onto this vector
+
+            //Sets up a temp vector to get its magnitude
+            Vector temp_vector = getVectorProjection(b);
+            //This works because the scalar projection is the signed magnitude of the vector projection
+
+            return temp_vector.magnitude;
+
+        }
+
+        std::vector<double> getDirectionAngles(){ //Returns the direction angles of a given vector
+
+            //This function will return the direction vectors alpha, beta, gamma in the following form:
+            //A std::vector with index 0 -> alpha | index 1 -> beta | index 2 -> gamma
+
+            //Note that this method will only work for angles in R3 or R2
+            if (v_dim > 3){
+                std::cerr << "Cannot compute direction angles for vectors with R > 3.";
+            }
+
+            std::vector<double> direction_angles;
+
+            for (double component : components){
+                double cos_of_angle = component / magnitude; //Computes the cos of the angle (a_n / |a|)
+                direction_angles.push_back(acos(cos_of_angle)); //Adds the arccos of that angle to the vector to be returned
+            }
+
+            return direction_angles;
+
+        }
+
+        Vector crossProduct(Vector b){ //Returns the cross product of this vector with a vector b
+
+            //Cross product is only defined for vectors in R3
+            if (v_dim != 3 || b.v_dim != 3){
+                std::cerr << "Both vectors must be in R3 to compute cross product.";
+            }
+
+            std::vector<double> new_vector_comps = { //Sets up vector components using cross product formula
+                components[1] * b.components[2] - components[2] * b.components[1],
+                components[2] * b.components[0] - components[0] * b.components[2],
+                components[0] * b.components[1] - components[1] * b.components[0]
+            };
+
+            //Sets up and returns the new vector
+            Vector new_vector(3, new_vector_comps);
+
+            return new_vector;
+
+        }
+
 };
 
 
 int main(){
 
     //Test stuff
-    std::vector<double> vector_comps = {-2, 3, 1};
+    std::vector<double> vector_comps = {1, 3, 4};
     Vector* v = new Vector(3, vector_comps);
-    std::vector<double> vector2_comps = {1, 1, 2};
+    std::vector<double> vector2_comps = {2, 7, -5};
     Vector* w = new Vector(3, vector2_comps);
-    Vector y = v->getProjection(*w);
+    Vector z = v->crossProduct(*w);
 
 
 
