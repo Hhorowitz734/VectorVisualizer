@@ -79,7 +79,7 @@ class Vector{ //Base vector class represents a vector
             std::cout << vector_string;
         }
 
-        Vector operator*=(int c){ //Handles multiplication of a vector by a scalar c
+        Vector operator*=(double c){ //Handles multiplication of a vector by a scalar c
             
             //Multiples each value in components by c
             for (double& component : components){
@@ -94,7 +94,7 @@ class Vector{ //Base vector class represents a vector
 
         }
 
-        Vector operator*(int c){
+        Vector operator*(double c){
 
             //Initializes info for constructor of new vector
             int new_vector_dims = v_dim;
@@ -114,7 +114,7 @@ class Vector{ //Base vector class represents a vector
             return new_vector;
         }
 
-        int operator*(Vector& v){ //Handles dot product multiplication
+        double operator*(Vector& v){ //Handles dot product multiplication
 
             //PLEASE NOTE -> THIS FUNCTION PERFORMS DOT PRODUCT MULTIPLICATION ONLY
             //FOR CROSS PRODUCT MULTIPLICATION, SEE [ CHANGE THIS WHEN I MAKE THAT FUNCTION ]
@@ -124,7 +124,7 @@ class Vector{ //Base vector class represents a vector
                 std::cerr << "Cannot multiply two vectors of different dimensions.";
             }
 
-            int sum = 0;
+            double sum = 0;
             
             //Multiplies values of components and adds them to sum (to compute dot product)
             for (int i = 0; i < v_dim; i++){
@@ -208,7 +208,7 @@ class Vector{ //Base vector class represents a vector
 
         }
 
-        double getAngleBetweenVectors(Vector v){ //Returns the angle between two angles
+        double getAngleBetweenVectors(Vector& v){ //Returns the angle between two angles
 
             if (v_dim != v.v_dim){
                 std::cerr << "Cannot get angle between two vectors of different dimensions.\n";
@@ -224,20 +224,35 @@ class Vector{ //Base vector class represents a vector
 
         }
 
+        Vector getProjection(Vector b){ //Gets the vector projection of another vector b onto this vector
+
+            //NOTE -> THIS REPRESENTS THE EQUATION Proj(_a)b = ((a * b) / |a|^2) * a
+            //And the vector which this function is called on is a
+
+            double dotProduct = *this * b;
+            double multiplier = dotProduct / pow(magnitude, 2); //Computes a * b / |a|^2
+            
+            //Multiplies the scalar (multiplier) by this vector and stores it as a new vector to be returned
+            Vector new_vector = *this * multiplier;
+
+            return new_vector;
+
+        }
+
 };
 
 
 int main(){
 
     //Test stuff
-    std::vector<double> vector_comps = {6, 2, 3};
+    std::vector<double> vector_comps = {-2, 3, 1};
     Vector* v = new Vector(3, vector_comps);
-    std::vector<double> vector2_comps = {6, 2, 4};
+    std::vector<double> vector2_comps = {1, 1, 2};
     Vector* w = new Vector(3, vector2_comps);
-    std::cout << v->getAngleBetweenVectors(*w);
+    Vector y = v->getProjection(*w);
 
 
-    delete v;
+
 
     return 0;
 }
