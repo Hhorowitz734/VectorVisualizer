@@ -229,6 +229,10 @@ class Vector{ //Base vector class represents a vector
             //NOTE -> THIS REPRESENTS THE EQUATION Proj(_a)b = ((a * b) / |a|^2) * a
             //And the vector which this function is called on is a
 
+            if (v_dim != b.v_dim){
+                std::cerr << "Cannot get projection between two vectors of different dimensions.\n";
+            }
+
             double dotProduct = *this * b;
             double multiplier = dotProduct / pow(magnitude, 2); //Computes a * b / |a|^2
             
@@ -296,11 +300,18 @@ class Vector{ //Base vector class represents a vector
 int main(){
 
     //Test stuff
-    std::vector<double> vector_comps = {1, 3, 4};
-    Vector* v = new Vector(3, vector_comps);
-    std::vector<double> vector2_comps = {2, 7, -5};
-    Vector* w = new Vector(3, vector2_comps);
-    Vector z = v->crossProduct(*w);
+    std::vector<double> vector_comps = {2, 0, 2};
+    std::vector<double> vector2_comps = {4, 2, -2};
+    std::vector<double> vector3_comps = {0, 2, 4};
+
+    Vector* a = new Vector(3, vector_comps);
+    Vector* b = new Vector(3, vector2_comps);
+    Vector* c = new Vector(3, vector3_comps);
+
+    Vector d = a->crossProduct(*b);
+    
+
+    
 
 
 
