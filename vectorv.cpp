@@ -15,7 +15,7 @@ class Vector{ //Base vector class represents a vector
 
             for (int i = 0; i < components.size(); i++){ // Loops over and adds each component to the string
 
-                vector_string += std::to_string(components[i]).substr(0, 5);
+                vector_string += std::to_string(components[i]).substr(0, 10);
 
                 if (i < components.size() - 1){
                     vector_string += ", ";
@@ -294,21 +294,38 @@ class Vector{ //Base vector class represents a vector
 
         }
 
+        static double scalarTripleProduct(Vector a, Vector b, Vector c){ //Returns the scalar triple product of two vectors
+
+            //Useful for those pesky volume questions of the webassign
+
+            //Takes cross product of a x b and does (a x b) * c
+            Vector temp = a.crossProduct(b);
+            
+            return temp * c;
+
+        }
+
 };
 
 
 int main(){
 
     //Test stuff
-    std::vector<double> vector_comps = {2, 0, 2};
-    std::vector<double> vector2_comps = {4, 2, -2};
-    std::vector<double> vector3_comps = {0, 2, 4};
+    std::vector<double> vector_comps = {2, 6, 0};
+    std::vector<double> vector2_comps = {9, -1, 0};
 
     Vector* a = new Vector(3, vector_comps);
     Vector* b = new Vector(3, vector2_comps);
-    Vector* c = new Vector(3, vector3_comps);
 
-    Vector d = a->crossProduct(*b);
+    std::cout << *a * *b << '\n';
+
+    Vector c = a->crossProduct(*b);
+
+    std::cout << c.magnitude << '\n';
+
+
+
+    
     
 
     
